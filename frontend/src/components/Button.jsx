@@ -6,7 +6,7 @@ function Button({
   stretch,
   disabled,
 }) {
-  const baseStyle = `cursor-pointer rounded-lg border-2  border-blue-500  px-2 py-1 capitalize font-medium ${shape === "circle" ? "aspect-square rounded-full" : ""} ${stretch ? "w-full" : ""}`;
+  const baseStyle = `cursor-pointer rounded-lg border-2  border-blue-500  px-2 py-1 capitalize disabled:cursor-not-allowed font-medium ${shape === "circle" ? "aspect-square rounded-full" : ""} ${stretch ? "w-full" : ""}`;
   if (type === "primary")
     return (
       <button
