@@ -15,7 +15,9 @@ const genTokenandSendRes = (user, res) => {
     .status(201)
     .cookie("jwt", token, {
       secure: process.env.NODE_ENV === "production",
-      expires: expiryDate
+      httpOnly: true,
+      expires: expiryDate,
+      sameSite: "none"
     })
     .json({
       status: "success",
