@@ -76,7 +76,6 @@ function AppForm({
 
   return (
     <Form onSubmit={handleSubmit}>
-      {/* Title */}
       <div className="flex items-center  gap-2">
         <label className="w-20 font-medium" htmlFor="title">
           Title:
@@ -90,7 +89,6 @@ function AppForm({
         />
       </div>
 
-      {/* Description */}
       <div className="flex items-center  gap-2">
         <label className="w-20 font-medium" htmlFor="description">
           Description:
@@ -105,7 +103,6 @@ function AppForm({
       </div>
 
       {}
-      {/* Due date */}
 
       <div className="flex items-center  gap-2">
         <label className="w-20 font-medium" htmlFor="title">
@@ -121,7 +118,6 @@ function AppForm({
         />
       </div>
 
-      {/* Priority */}
       <div className="flex items-center  gap-2">
         <label className="w-20 font-medium" htmlFor="priority">
           Priority:
@@ -139,7 +135,6 @@ function AppForm({
         </select>
       </div>
 
-      {/* Status */}
       {type === "task" && (
         <div className="flex items-center  gap-2">
           <label className="w-20 font-medium" htmlFor="status">
