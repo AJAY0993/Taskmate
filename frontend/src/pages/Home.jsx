@@ -29,7 +29,7 @@ function Home() {
     <AppLayout>
       <AppHeader>
         <h3 className="text-3xl font-semibold text-neutral-50">
-          Hello {user.username}
+          Hello {user?.username}
         </h3>
       </AppHeader>
       <section className="p-2">

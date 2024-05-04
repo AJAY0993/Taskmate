@@ -40,6 +40,7 @@ function Login() {
       toast.success("Welcome back");
       navigate("/");
     } catch (error) {
+      console.log(error);
       toast.error(error.response.data.message);
     }
   };
