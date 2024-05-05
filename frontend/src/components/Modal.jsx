@@ -25,7 +25,7 @@ function OverLay({ children }) {
           <HiX />
         </Button>
       </div>
-      <div className="absolute flex h-full w-full items-center justify-center">
+      <div className="absolute flex h-full w-full items-center justify-center px-4">
         {children}
       </div>
     </div>,

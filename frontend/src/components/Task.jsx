@@ -19,7 +19,7 @@ function Task({ task }) {
   const getBg = () => {
     if (status === "todo") return "bg-blue-400 border-blue-600";
     if (status === "inProgress") return "bg-orange-400 border-orange-600";
-    if (status === "comepleted") return "bg-green-400 border-green-600";
+    if (status === "completed") return "bg-green-400 border-green-600";
   };
 
   const taskBg = getBg(status);
@@ -30,7 +30,7 @@ function Task({ task }) {
   const bg = `${priority === "high" ? "bg-red-400" : priority === "medium" ? "bg-yellow-400" : "bg-green-400"}`;
   return (
     <li
-      className={` w-300 relative max-w-[30rem] rounded-lg border-2 ${taskBg} px-4 py-2 text-neutral-50`}
+      className={` w-[300px] relative max-w-[30rem] rounded-lg border-2 ${taskBg} px-4 py-2 text-neutral-50`}
     >
       <span className="absolute right-12 top-4  rounded-xl bg-blue-400 px-2 py-1">
         {status}

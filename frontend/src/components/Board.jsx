@@ -40,7 +40,7 @@ function Board({ board }) {
   const bg = bgs[Math.floor(Math.random() * 5)];
   return (
     <li
-      className={`relative w-[300px] max-w-[30rem] rounded-lg border-2 ${bg}  bg-neutral-50 px-4 py-2 text-neutral-50`}
+      className={`relative w-[300px] max-w-[30rem] rounded-lg border-2 ${bg} px-4 py-2 text-neutral-50`}
       onClick={navigateToTasks}
     >
       <Menus.Toggle id={id}>
