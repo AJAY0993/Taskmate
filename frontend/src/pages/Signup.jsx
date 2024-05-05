@@ -1,13 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "../utils/axios";
 import { isEmail } from "validator";
 import toast from "react-hot-toast";
 import Button from "../components/Button";
-import { useDispatch, useSelector } from "react-redux";
 import { getIsAuthenticated, login } from "../reducer/userSlice";
-import { Link, Navigate, useNavigate } from "react-router-dom";
 
 function Signup() {
+  const [signiningUp,setSigningUp]= useState(false)
   const emailRef = useRef();
   const usernameRef = useRef();
   const confirmPasswordRef = useRef();
@@ -18,6 +19,7 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     try {
+      setSigningUp(true)
       e.preventDefault();
       const email = emailRef.current.value;
       const username = usernameRef.current.value;
@@ -54,9 +56,10 @@ function Signup() {
       const user = res.data.user;
       dispatch(login(user));
       toast.success("Lets Go yeah!");
+      setSigningUp(false)
       navigate("/");
-    } catch (error) {
-      console.log(error);
+} catch (error) {
+      setSigningUp(false)    
       toast.error(error.response.data.message);
     }
   };
@@ -125,7 +128,7 @@ function Signup() {
         </div>
 
         <div className="mt-8 w-72">
-          <Button stretch={true}>Login</Button>
+          <Button stretch={true} disabled={signiningUp}>Login</Button>
           <p className="text-center">
             already registered ?
             <Link className="text-blue-400 underline" to="/login">

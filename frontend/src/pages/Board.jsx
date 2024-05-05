@@ -19,7 +19,7 @@ function Board() {
   const { id } = useParams();
   const tasks = useSelector(getBoardTasks(id));
   const board = useSelector(getBoard(id));
-  const { create } = useCreate();
+  const { create,isLoading } = useCreate();
 
   const handleSubmit = (data) => {
     for (let key in data) {
@@ -51,6 +51,7 @@ function Board() {
               type="task"
               operation="create"
               board={id}
+              isSubmitting={isLoading}
               onSubmit={handleSubmit}
             />
           </Modal.Window>

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import axios from "../utils/axios";
 import { isEmail } from "validator";
 import toast from "react-hot-toast";
@@ -8,6 +8,7 @@ import { getIsAuthenticated, login } from "../reducer/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
+  const [loggingIn,seIsLoggingIn]= useState(false)
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function Login() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      seIsLoggingIn(true)
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
       if (email === "" || password === "")
@@ -38,9 +40,10 @@ function Login() {
       const user = res.data.user;
       dispatch(login(user));
       toast.success("Welcome back");
+      seIsLoggingIn(false)
       navigate("/");
     } catch (error) {
-      console.log(error);
+      seIsLoggingIn(false)
       toast.error(error.response.data.message);
     }
   };
@@ -70,7 +73,7 @@ function Login() {
           />
         </div>
         <div className="mt-8 w-72">
-          <Button stretch={true}>Login</Button>
+          <Button stretch={true} disabled={loggingIn}>Login</Button>
           <p className="text-center">
             New to Task Mate ?{" "}
             <Link className="text-blue-400 underline" to="/signup">
