@@ -63,7 +63,7 @@ function Signup() {
 
   if (isAuthenticated) return <Navigate to="/" replace />;
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <div className="flex min-h-screen flex-col items-center justify-center px-4 ">
       <h3 className="text-center text-3xl font-semibold capitalize">Sign up</h3>
       <form
         className="mt-4 flex w-[30rem] max-w-full flex-col items-center gap-4 rounded-lg border-2 border-gray-200  p-2 shadow-md"

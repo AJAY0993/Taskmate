@@ -7,7 +7,7 @@ function AppLayout({ children }) {
     <div className="relative m-auto h-screen max-w-[1300px] bg-neutral-100">
       <Header />
       <SideNav />
-      <main className="relative max-h-screen overflow-y-scroll pt-12 md:ml-36">
+      <main className="relative max-h-screen overflow-y-scroll pb-6 md:pb-0 pt-12 md:ml-36">
         <ProtectRoute>{children}</ProtectRoute>
       </main>
     </div>

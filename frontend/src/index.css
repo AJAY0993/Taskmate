@@ -4,6 +4,6 @@
 
 @layer components {
     .input {
-        @apply rounded-lg w-64 border-2 border-gray-300 px-2 py-1 focus:border-blue-400 focus:outline-0;
+        @apply rounded-lg sm:w-64 w-56 border-2 border-gray-300 px-2 py-1 focus:border-blue-400 focus:outline-0;
     }
 }

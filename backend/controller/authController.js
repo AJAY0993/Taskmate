@@ -17,7 +17,7 @@ const genTokenandSendRes = (user, res) => {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       expires: expiryDate,
-      sameSite: "none"
+      sameSite: "None"
     })
     .json({
       status: "success",
