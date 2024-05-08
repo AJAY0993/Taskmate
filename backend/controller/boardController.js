@@ -1,4 +1,5 @@
 const Board = require("../models/boardModel")
+const Task = require("../models/taskModel")
 
 // create board
 const createBoard = async (req, res, next) => {
@@ -120,6 +121,8 @@ const deleteBoard = async (req, res, next) => {
 
     // If Everything is OK delete the Board
     board = await Board.findByIdAndDelete(req.params.id)
+    await Task.deleteMany({ board: req.params.id })
+
     if (!board)
       return res.status(401).json({ message: "No Board found with this id" })
     return res.status(204).json({ message: "Board deleted successfully" })

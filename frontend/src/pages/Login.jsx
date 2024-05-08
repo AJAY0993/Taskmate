@@ -8,17 +8,21 @@ import { getIsAuthenticated, login } from "../reducer/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
-  const [loggingIn,seIsLoggingIn]= useState(false)
+  const [loggingIn, seIsLoggingIn] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(getIsAuthenticated);
-
+  const handleGuest = (e) => {
+    e.preventDefault();
+    emailRef.current.value = "test@email.com";
+    passwordRef.current.value = "12345678";
+  };
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      seIsLoggingIn(true)
+      seIsLoggingIn(true);
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
       if (email === "" || password === "")
@@ -40,10 +44,10 @@ function Login() {
       const user = res.data.user;
       dispatch(login(user));
       toast.success("Welcome back");
-      seIsLoggingIn(false)
+      seIsLoggingIn(false);
       navigate("/");
     } catch (error) {
-      seIsLoggingIn(false)
+      seIsLoggingIn(false);
       toast.error(error.response.data.message);
     }
   };
@@ -53,10 +57,7 @@ function Login() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">
       <h3 className="text-center text-3xl font-semibold capitalize">Login</h3>
-      <form
-        className="mt-4 flex w-[30rem] max-w-full flex-col items-center gap-4 rounded-lg border-2 border-gray-200  p-2 shadow-md"
-        onSubmit={handleSubmit}
-      >
+      <form className="mt-4 flex w-[30rem] max-w-full flex-col items-center gap-4 rounded-lg border-2 border-gray-200  p-2 shadow-md">
         <div className="flex items-center  gap-2">
           <label className="w-20 font-medium" htmlFor="email">
             Email:
@@ -73,9 +74,21 @@ function Login() {
           />
         </div>
         <div className="mt-8 w-72">
-          <Button stretch={true} disabled={loggingIn}>Login</Button>
+          <Button stretch={true} disabled={loggingIn} onClick={handleSubmit}>
+            Login
+          </Button>
           <p className="text-center">
-            New to Task Mate ?{" "}
+            Continue as
+            <button
+              className="mx-2 mb-2 text-blue-400 "
+              to="/signup"
+              onClick={handleGuest}
+            >
+              guest
+            </button>
+          </p>
+          <p className="text-center">
+            New to Task Mate ?
             <Link className="text-blue-400 underline" to="/signup">
               Sign up
             </Link>
