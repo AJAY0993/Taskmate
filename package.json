@@ -4,5 +4,7 @@
     "start": "cd backend && node server",
     "type": "module"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2"
+  }
 }

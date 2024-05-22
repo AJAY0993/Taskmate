@@ -8,8 +8,7 @@ import {
   updateBoard,
   deleteBoard
 } from "../controller/boardController"
-const { isAuthenticated } = require("../controller/authController")
-
+import { isAuthenticated } from "../controller/authController"
 const boardRouter = express.Router()
 
 boardRouter.use(isAuthenticated)

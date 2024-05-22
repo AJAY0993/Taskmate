@@ -1,5 +1,5 @@
 import express from "express"
-import { isAuthenticated } from "./../controller/authController"
+import { isAuthenticated } from "../controller/authController"
 import {
   getTasks,
   createTask,

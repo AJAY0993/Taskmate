@@ -1,7 +1,7 @@
 import express from "express"
 import Board from "../models/boardModel"
 import Task from "../models/taskModel"
-import { get } from "lodash"
+import lodash from "lodash"
 
 // create board
 export const createBoard = async (
@@ -11,7 +11,7 @@ export const createBoard = async (
 ) => {
   try {
     const { title, description } = req.body
-    const user = get(req, "user.id") as string
+    const user = lodash.get(req, "user.id") as string
 
     console.log(req.body)
     const newBoard = await Board.create({
@@ -55,7 +55,7 @@ export const getMyBoards = async (
   res: express.Response
 ) => {
   try {
-    const boards = await Board.find({ user: get(req, "user.id") })
+    const boards = await Board.find({ user: lodash.get(req, "user.id") })
     res.status(200).json({
       message: "Boards fetched successfully",
       boards
@@ -98,7 +98,7 @@ export const updateBoard = async (
       return res.status(400).json({ message: "No board found with this ID" })
 
     // Check if creator is the one who sent the request to update it
-    if (board.user.toString() !== get(req, "user.id"))
+    if (board.user.toString() !== lodash.get(req, "user.id"))
       return res
         .status(403)
         .json({ message: "You are not authorized to update this Board" })
@@ -133,7 +133,7 @@ export const deleteBoard = async (
       return res.status(400).json({ message: "No board found with this ID" })
 
     // Check if creator is the one who sent the request to delete it
-    if (board.user.toString() !== get(req, "user.id"))
+    if (board.user.toString() !== lodash.get(req, "user.id"))
       return res
         .status(403)
         .json({ message: "You are not authorized to delete this Board" })

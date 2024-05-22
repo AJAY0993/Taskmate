@@ -1,6 +1,6 @@
 import express from "express"
 import Task from "../models/taskModel"
-import { get } from "lodash"
+import lodash from "lodash"
 
 // Create a task
 export const createTask = async (
@@ -9,7 +9,7 @@ export const createTask = async (
 ) => {
   try {
     const { title, board, description, dueDate, priority } = req.body
-    const user = get(req, "user.id")
+    const user = lodash.get(req, "user.id")
     const newTask = await Task.create({
       title,
       board,
@@ -51,7 +51,7 @@ export const getMyTasks = async (
   res: express.Response
 ) => {
   try {
-    const tasks = await Task.find({ user: get(req, "user.id") })
+    const tasks = await Task.find({ user: lodash.get(req, "user.id") })
     res.status(200).json({
       message: "Tasks fetched successfully",
       tasks
@@ -94,7 +94,7 @@ export const updateTask = async (
       return res.status(400).json({ message: "No task found with this ID" })
 
     // Check if creator is the one who sent the request to update it
-    if (task.user.toString() !== get(req, "user.id"))
+    if (task.user.toString() !== lodash.get(req, "user.id"))
       return res
         .status(403)
         .json({ message: "You are not authorized to update this task" })
@@ -127,7 +127,7 @@ export const deleteTask = async (
       return res.status(400).json({ message: "No task found with this ID" })
 
     // Check if creator is the one who sent the request to delete it
-    if (task.user.toString() !== get(req, "user.id"))
+    if (task.user.toString() !== lodash.get(req, "user.id"))
       return res
         .status(403)
         .json({ message: "You are not authorized to delete this task" })

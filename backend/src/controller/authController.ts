@@ -2,7 +2,7 @@ import express from "express"
 import { promisify } from "util"
 import jwt from "jsonwebtoken"
 import User, { UserDocument } from "../models/userModel"
-import { merge } from "lodash"
+import lodash from "lodash"
 
 const genToken = (userId: string): string => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET as string, {
@@ -147,7 +147,7 @@ export const isAuthenticated = async (
       message: "User does not exist anymore"
     })
 
-  merge(req, { user: decoded })
+  lodash.merge(req, { user: decoded })
 
   next()
 }

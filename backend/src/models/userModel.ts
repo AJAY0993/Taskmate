@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
+import bcrypt from "bcrypt"
 const { Document } = mongoose
-const bcrypt = require("bcrypt")
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
