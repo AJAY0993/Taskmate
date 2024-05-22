@@ -1,12 +1,16 @@
-const { promisify } = require("util")
-const jwt = require("jsonwebtoken")
-const User = require("../models/userModel")
+import express from "express"
+import { promisify } from "util"
+import jwt from "jsonwebtoken"
+import User, { UserDocument } from "../models/userModel"
+import { merge } from "lodash"
 
-const genToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "30d" })
+const genToken = (userId: string): string => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET as string, {
+    expiresIn: "30d"
+  })
 }
 
-const genTokenandSendRes = (user, res) => {
+const genTokenandSendRes = (user: UserDocument, res: express.Response) => {
   // Generate JWT token
   const token = genToken(user._id)
   const expiryDate = new Date(Date.now() + 60 * 60 * 1000 * 24 * 30) // 30
@@ -17,7 +21,7 @@ const genTokenandSendRes = (user, res) => {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       expires: expiryDate,
-      sameSite: "None"
+      sameSite: "none"
     })
     .json({
       status: "success",
@@ -29,7 +33,7 @@ const genTokenandSendRes = (user, res) => {
 
 // Signup Functionality
 
-const signUp = async (req, res, next) => {
+export const signUp = async (req: express.Request, res: express.Response) => {
   // Check Fields are not empty
   const { username, email, password, confirmPassword } = req.body
 
@@ -75,7 +79,7 @@ const signUp = async (req, res, next) => {
 
 // Login Functionality
 
-const login = async (req, res, next) => {
+export const login = async (req: express.Request, res: express.Response) => {
   const { email, password } = req.body
 
   // Check if email and password are provided
@@ -100,13 +104,17 @@ const login = async (req, res, next) => {
 }
 
 // Logout
-const logout = (req, res) => {
+export const logout = (req: express.Request, res: express.Response) => {
   res.cookie("jwt", "")
   res.json({ message: "Logged out" })
 }
 
 // Auth middleware
-const isAuthenticated = async (req, res, next) => {
+export const isAuthenticated = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
   const { jwt: jwtToken } = req.cookies
 
   // Check if token is Provided
@@ -118,9 +126,13 @@ const isAuthenticated = async (req, res, next) => {
   }
 
   // Check if token is valid
-  let decoded
+  let decoded, userId
   try {
-    decoded = await promisify(jwt.verify)(jwtToken, process.env.JWT_SECRET)
+    decoded = jwt.verify(jwtToken, process.env.JWT_SECRET)
+    if (typeof decoded !== "string" && "id" in decoded) {
+      const userId = decoded.id
+      console.log("User ID:", userId)
+    }
   } catch (error) {
     return res.status(401).json({
       status: "failed",
@@ -128,22 +140,14 @@ const isAuthenticated = async (req, res, next) => {
     })
   }
   // Check if user still exist
-  const user = await User.findById(decoded.id)
+  const user = await User.findById(userId)
   if (!user)
     return res.status(401).json({
       status: "failed",
       message: "User does not exist anymore"
     })
 
-  req.user = {
-    ...decoded
-  }
-  next()
-}
+  merge(req, { user: decoded })
 
-module.exports = {
-  signUp,
-  login,
-  logout,
-  isAuthenticated
+  next()
 }

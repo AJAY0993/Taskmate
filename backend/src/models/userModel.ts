@@ -1,4 +1,5 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose"
+const { Document } = mongoose
 const bcrypt = require("bcrypt")
 
 const userSchema = new mongoose.Schema({
@@ -19,8 +20,8 @@ const userSchema = new mongoose.Schema({
   confirmPassword: {
     type: String,
     validate: {
-      validator: function (val) {
-        val === this.password
+      validator: function (val: string): boolean {
+        return val === this.password
       },
       message: "Confirm password is not equal to password"
     },
@@ -38,11 +39,25 @@ userSchema.pre("save", async function (next) {
   next()
 })
 
-userSchema.methods.isPasswordCorrect = async (password, hashedPassword) => {
+userSchema.methods.isPasswordCorrect = async (
+  password: string,
+  hashedPassword: string
+) => {
   // Check if the password is correct
   const result = await bcrypt.compare(password, hashedPassword)
   return result
 }
-const User = mongoose.model("User", userSchema)
 
-module.exports = User
+export interface UserDocument extends Document {
+  username: string
+  email: string
+  password: string
+  confirmPassword: string
+  profilePic: string
+  _id: string
+
+  isPasswordCorrect(candidatePassword: string, hashedPassword: string): boolean
+}
+const User = mongoose.model<UserDocument>("User", userSchema)
+
+export default User

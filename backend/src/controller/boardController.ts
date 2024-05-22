@@ -1,11 +1,18 @@
-const Board = require("../models/boardModel")
-const Task = require("../models/taskModel")
+import express from "express"
+import Board from "../models/boardModel"
+import Task from "../models/taskModel"
+import { get } from "lodash"
 
 // create board
-const createBoard = async (req, res, next) => {
+export const createBoard = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
   try {
     const { title, description } = req.body
-    const user = req.user.id
+    const user = get(req, "user.id") as string
+
     console.log(req.body)
     const newBoard = await Board.create({
       title,
@@ -24,7 +31,10 @@ const createBoard = async (req, res, next) => {
 }
 
 // get all boards
-const getBoards = async (req, res, next) => {
+export const getBoards = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const boards = await Board.find()
     res.status(200).json({
@@ -40,9 +50,12 @@ const getBoards = async (req, res, next) => {
 }
 
 // get only my boards
-const getMyBoards = async (req, res, next) => {
+export const getMyBoards = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
-    const boards = await Board.find({ user: req.user.id })
+    const boards = await Board.find({ user: get(req, "user.id") })
     res.status(200).json({
       message: "Boards fetched successfully",
       boards
@@ -56,7 +69,7 @@ const getMyBoards = async (req, res, next) => {
 }
 
 // get board by ID
-const getBoard = async (req, res, next) => {
+export const getBoard = async (req: express.Request, res: express.Response) => {
   try {
     const board = await Board.findById(req.params.id)
     if (!board)
@@ -74,7 +87,10 @@ const getBoard = async (req, res, next) => {
 }
 
 // update board
-const updateBoard = async (req, res, next) => {
+export const updateBoard = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     // Check if Board exist
     let board = await Board.findById(req.params.id)
@@ -82,7 +98,7 @@ const updateBoard = async (req, res, next) => {
       return res.status(400).json({ message: "No board found with this ID" })
 
     // Check if creator is the one who sent the request to update it
-    if (board.user.toString() !== req.user.id)
+    if (board.user.toString() !== get(req, "user.id"))
       return res
         .status(403)
         .json({ message: "You are not authorized to update this Board" })
@@ -106,7 +122,10 @@ const updateBoard = async (req, res, next) => {
 }
 
 // delete board
-const deleteBoard = async (req, res, next) => {
+export const deleteBoard = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     // Check if Board exist
     let board = await Board.findById(req.params.id)
@@ -114,7 +133,7 @@ const deleteBoard = async (req, res, next) => {
       return res.status(400).json({ message: "No board found with this ID" })
 
     // Check if creator is the one who sent the request to delete it
-    if (board.user.toString() !== req.user.id)
+    if (board.user.toString() !== get(req, "user.id"))
       return res
         .status(403)
         .json({ message: "You are not authorized to delete this Board" })
@@ -132,13 +151,4 @@ const deleteBoard = async (req, res, next) => {
       message: error.message
     })
   }
-}
-
-module.exports = {
-  createBoard,
-  getBoard,
-  getBoards,
-  getMyBoards,
-  updateBoard,
-  deleteBoard
 }

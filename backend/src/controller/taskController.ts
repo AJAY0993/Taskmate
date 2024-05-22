@@ -1,10 +1,15 @@
-const Task = require("../models/taskModel")
+import express from "express"
+import Task from "../models/taskModel"
+import { get } from "lodash"
 
 // Create a task
-const createTask = async (req, res, next) => {
+export const createTask = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { title, board, description, dueDate, priority } = req.body
-    const user = req.user.id
+    const user = get(req, "user.id")
     const newTask = await Task.create({
       title,
       board,
@@ -25,7 +30,7 @@ const createTask = async (req, res, next) => {
 }
 
 // get Tasks
-const getTasks = async (req, res, next) => {
+export const getTasks = async (req: express.Request, res: express.Response) => {
   try {
     const tasks = await Task.find()
     res.status(200).json({
@@ -41,9 +46,12 @@ const getTasks = async (req, res, next) => {
 }
 
 // Get my Tasks
-const getMyTasks = async (req, res, next) => {
+export const getMyTasks = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
-    const tasks = await Task.find({ user: req.user.id })
+    const tasks = await Task.find({ user: get(req, "user.id") })
     res.status(200).json({
       message: "Tasks fetched successfully",
       tasks
@@ -57,7 +65,7 @@ const getMyTasks = async (req, res, next) => {
 }
 
 // GET task by ID
-const getTask = async (req, res, next) => {
+export const getTask = async (req: express.Request, res: express.Response) => {
   try {
     const task = await Task.findById(req.params.id)
     if (!task)
@@ -75,7 +83,10 @@ const getTask = async (req, res, next) => {
 }
 
 // Update a task
-const updateTask = async (req, res, next) => {
+export const updateTask = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     // Check if task exist
     let task = await Task.findById(req.params.id)
@@ -83,7 +94,7 @@ const updateTask = async (req, res, next) => {
       return res.status(400).json({ message: "No task found with this ID" })
 
     // Check if creator is the one who sent the request to update it
-    if (task.user.toString() !== req.user.id)
+    if (task.user.toString() !== get(req, "user.id"))
       return res
         .status(403)
         .json({ message: "You are not authorized to update this task" })
@@ -105,7 +116,10 @@ const updateTask = async (req, res, next) => {
 }
 
 // Delete a task
-const deleteTask = async (req, res, next) => {
+export const deleteTask = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     // Check if task exist
     const task = await Task.findById(req.params.id)
@@ -113,7 +127,7 @@ const deleteTask = async (req, res, next) => {
       return res.status(400).json({ message: "No task found with this ID" })
 
     // Check if creator is the one who sent the request to delete it
-    if (task.user.toString() !== req.user.id)
+    if (task.user.toString() !== get(req, "user.id"))
       return res
         .status(403)
         .json({ message: "You are not authorized to delete this task" })
@@ -127,13 +141,4 @@ const deleteTask = async (req, res, next) => {
       message: error.message
     })
   }
-}
-
-module.exports = {
-  createTask,
-  getTask,
-  getTasks,
-  getMyTasks,
-  updateTask,
-  deleteTask
 }

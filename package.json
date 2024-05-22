@@ -1,7 +1,8 @@
 {
   "scripts": {
     "build": "cd backend && npm i",
-    "start": "cd backend && node server"
+    "start": "cd backend && node server",
+    "type": "module"
   },
   "dependencies": {}
 }

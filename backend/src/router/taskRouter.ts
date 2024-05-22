@@ -1,13 +1,13 @@
-const express = require("express")
-const { isAuthenticated } = require("./../controller/authController")
-const {
+import express from "express"
+import { isAuthenticated } from "./../controller/authController"
+import {
   getTasks,
   createTask,
   getMyTasks,
   getTask,
   updateTask,
   deleteTask
-} = require("../controller/taskController")
+} from "../controller/taskController"
 
 const taskRouter = express.Router()
 
@@ -16,4 +16,4 @@ taskRouter.route("/").get(getTasks).post(createTask)
 taskRouter.route("/my").get(getMyTasks)
 taskRouter.route("/:id").get(getTask).patch(updateTask).delete(deleteTask)
 
-module.exports = taskRouter
+export default taskRouter

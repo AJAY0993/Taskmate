@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose"
 
 const boardSchema = new mongoose.Schema({
   title: {
@@ -19,5 +19,4 @@ const boardSchema = new mongoose.Schema({
 })
 
 const Board = mongoose.model("Board", boardSchema)
-
-module.exports = Board
+export default Board
